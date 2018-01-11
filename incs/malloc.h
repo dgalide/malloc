@@ -43,6 +43,7 @@ typedef struct				s_malloc
 t_malloc					map;
 
 void 						*ft_malloc(size_t size);
+void						ft_free(void *ptr);
 void						show_alloc_mem(void);
 
 #endif

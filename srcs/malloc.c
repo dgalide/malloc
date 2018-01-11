@@ -32,7 +32,7 @@ void			*handle_large(int size)
 		tmp->next = ptr;
 		ptr->prev = tmp;
 	}
-	return (ptr + sizeof(t_large));
+	return ((void *)ptr + sizeof(t_large));
 }
 
 void			*create_page(t_page *pages, int size)
@@ -61,7 +61,7 @@ void			*create_page(t_page *pages, int size)
 	}
 	else
 		map.pages = page;
-	return ((void *)(page->blocks + sizeof(t_block)));
+	return ((void *)page->blocks + sizeof(t_block));
 }
 
 void			*update_page(t_page *pages, int size)
@@ -75,10 +75,10 @@ void			*update_page(t_page *pages, int size)
 	if (!pages)
 		return (NULL);
 	p = pages;
-	b = p->blocks;
 	total = sizeof(t_page);
 	while (p)
 	{
+		b = p->blocks;
 		while (b)
 		{
 			prev = b;
@@ -93,6 +93,7 @@ void			*update_page(t_page *pages, int size)
 			new->size = size;
 			new->used = 1;
 			new->last = 1;
+			new->next = NULL;
 			return ((void *)new + sizeof(t_block));
 		}
 		p = p->next;
