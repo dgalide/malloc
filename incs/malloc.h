@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   malloc.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/16 12:33:24 by dgalide           #+#    #+#             */
+/*   Updated: 2018/01/16 12:43:21 by dgalide          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MALLOC_H
 # define MALLOC_H
 
@@ -42,8 +54,9 @@ typedef struct				s_malloc
 
 t_malloc					map;
 
-void 						*ft_malloc(size_t size);
-void						ft_free(void *ptr);
+void 						*malloc(size_t size);
+void						*realloc(void *ptr, size_t size);
+void						free(void *ptr);
 void						show_alloc_mem(void);
 
 #endif

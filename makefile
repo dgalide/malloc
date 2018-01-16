@@ -4,6 +4,7 @@ LIB = srcs/libft/libft.a
 SRC = srcs/malloc.c
 SRC += srcs/free.c
 SRC += srcs/show_alloc_mem.c
+SRC += srcs/realloc.c
 
 INC = -I ./includes/
 

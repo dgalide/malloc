@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/16 12:33:05 by dgalide           #+#    #+#             */
+/*   Updated: 2018/01/16 12:40:21 by dgalide          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "../incs/malloc.h"
 
 void 			refresh_list(t_large *page)
@@ -45,7 +58,7 @@ void			reset_small(void *ptr)
 	}	
 }
 
-void			ft_free(void *ptr)
+void			free(void *ptr)
 {
 	t_large		*tmp;
 

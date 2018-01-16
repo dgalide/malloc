@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   malloc.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
+/*   Updated: 2018/01/16 12:40:46 by dgalide          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incs/malloc.h"
 #include <stdio.h>
 
@@ -113,7 +125,7 @@ void			*handle_small(t_malloc *map, int size)
 		return create_page(map->pages, size);
 }
 
-void 			*ft_malloc(size_t size)
+void 			*malloc(size_t size)
 {
 	static int	first;
 
