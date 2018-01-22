@@ -125,6 +125,7 @@ void			*malloc(size_t size)
 {
 	static int	first;
 
+	printf("[MALLOC] -- size : %d at entry\n", (int)size);
 	if (first++ == 0)
 	{
 		g_map.size_page = getpagesize();

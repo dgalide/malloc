@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../incs/malloc.h"
+#include <stdio.h>
 
 void			show_large(t_large *large, int *total, int *total_size)
 {
@@ -21,15 +22,15 @@ void			show_large(t_large *large, int *total, int *total_size)
 	(void)total_size;
 	while (tmp)
 	{
-		ft_printf("LARGE :\n\tWANTED -> %p - %p : %d bytes\n\tGIVEN -> %p - %p : %d bytes\n\t-- %d dedicated to malloc\n\t-- %d remaining bytes\n\t-- page size : %d\n",
+		printf("LARGE :\n\tWANTED -> %p - %p : %d bytes\n\tGIVEN -> %p - %p : %d bytes\n\t-- %d dedicated to malloc\n\t-- %d remaining bytes\n\t-- page size : %d\n",
 			(void *)tmp + sizeof(t_large),
 			(void *)tmp + sizeof(t_large) + tmp->size,
 			tmp->size,
 			(void *)tmp,
 			(void *)tmp + tmp->total_size,
 			tmp->total_size,
-			sizeof(t_large),
-			tmp->total_size - tmp->size - sizeof(t_large),
+			(int)sizeof(t_large),
+			(int)(tmp->total_size - tmp->size - sizeof(t_large)),
 			g_map.size_page);
 		// *total_size += tmp->size;
 		// *total += tmp->total_size;
@@ -39,16 +40,16 @@ void			show_large(t_large *large, int *total, int *total_size)
 
 void			show_tiny(t_block *tmp)
 {
-	ft_printf("\tTINY :\n\t\tWANTED -> %p - %p : %d bytes\n\t\tGIVEN -> %p - %p : %d bytes\n\t\t-- %d dedicated to malloc\tUsed : %d\n",
+	printf("\tTINY :\n\t\tWANTED -> %p - %p : %d bytes\n\t\tGIVEN -> %p - %p : %d bytes\n\t\t-- %d dedicated to malloc\tUsed : %d\n",
 			(void *)tmp + sizeof(t_block), (void *)tmp + sizeof(t_block) + tmp->size, tmp->size,
-			(void *)tmp, (void *)tmp + sizeof(t_block) + tmp->size, sizeof(t_block) + tmp->size, sizeof(t_block), tmp->used);
+			(void *)tmp, (void *)tmp + sizeof(t_block) + tmp->size, (int)(sizeof(t_block)) + tmp->size, (int)(sizeof(t_block)), tmp->used);
 }
 
 void			show_small(t_block *tmp)
 {
-	ft_printf("\tSMALL :\n\t\tWANTED -> %p - %p : %d bytes\n\t\tGIVEN -> %p - %p : %d bytes\n\t\t-- %d dedicated to malloc\tUsed : %d\n",
-			(void *)tmp + sizeof(t_block), (void *)tmp + sizeof(t_block) + tmp->size, tmp->size,
-			(void *)tmp, (void *)tmp + sizeof(t_block) + tmp->size, sizeof(t_block) + tmp->size, sizeof(t_block), tmp->used);
+	printf("\tSMALL :\n\t\tWANTED -> %p - %p : %d bytes\n\t\tGIVEN -> %p - %p : %d bytes\n\t\t-- %d dedicated to malloc\tUsed : %d\n",
+			(void *)tmp + sizeof(t_block), (void *)tmp + (int)(sizeof(t_block)) + tmp->size, tmp->size,
+			(void *)tmp, (void *)tmp + sizeof(t_block) + tmp->size, (int)(sizeof(t_block)) + tmp->size, (int)(sizeof(t_block)), tmp->used);
 }
 
 void			show_medium(t_page *page, int *total, int *total_size)
