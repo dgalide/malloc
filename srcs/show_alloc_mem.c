@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   show_alloc_mem.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
+/*   Updated: 2018/01/22 17:03:38 by dgalide          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incs/malloc.h"
 
 void			show_large(t_large *large, int *total, int *total_size)
@@ -16,7 +28,7 @@ void			show_large(t_large *large, int *total, int *total_size)
 			tmp->total_size,
 			sizeof(t_large),
 			tmp->total_size - tmp->size - sizeof(t_large),
-			map.size_page);
+			g_map.size_page);
 		*total_size += tmp->size;
 		*total += tmp->total_size;
 		tmp = tmp->next;
@@ -62,7 +74,7 @@ void			show_medium(t_page *page, int *total, int *total_size)
 		}
 		ft_printf("\n\tTotal given : %d Bytes\n", total_page);
 		*total_size += total_page;
-		*total += map.size_page;
+		*total += g_map.size_page;
 		total_page = 0;
 		tmp = tmp->next;
 	}
@@ -75,7 +87,7 @@ void			show_alloc_mem(void)
 
 	total = 0;
 	total_size = 0;
-	show_large(map.larges, &total, &total_size);
-	show_medium(map.pages, &total, &total_size);
+	show_large(g_map.larges, &total, &total_size);
+	show_medium(g_map.pages, &total, &total_size);
 	ft_printf("%d bytes given\n%d bytes allocated", total_size, total);
 }

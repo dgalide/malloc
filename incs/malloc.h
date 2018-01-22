@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:24 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/16 12:43:21 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/22 16:56:27 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@
 # include <errno.h>
 # include <string.h>
 
-# define TINY 10
-# define MEDIUM 500
+# define TINY 50
+# define MEDIUM 1024
+# define PRE_ALLOC 25
 
-typedef struct 				s_block
+typedef struct				s_block
 {
 	int						used;
 	int						last;
@@ -30,7 +31,7 @@ typedef struct 				s_block
 	struct s_block			*next;
 }							t_block;
 
-typedef struct 				s_large
+typedef struct				s_large
 {
 	int						size;
 	int						total_size;
@@ -38,7 +39,7 @@ typedef struct 				s_large
 	struct s_large			*prev;
 }							t_large;
 
-typedef struct 				s_page
+typedef struct				s_page
 {
 	struct s_page			*next;
 	struct s_page			*prev;
@@ -52,11 +53,12 @@ typedef struct				s_malloc
 	int						size_page;
 }							t_malloc;
 
-t_malloc					map;
+t_malloc					g_map;
 
-void 						*malloc(size_t size);
+void						*malloc(size_t size);
 void						*realloc(void *ptr, size_t size);
 void						free(void *ptr);
 void						show_alloc_mem(void);
+void						*malloc_failed(void);
 
 #endif
