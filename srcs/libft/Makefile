@@ -6,7 +6,7 @@
 #    By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/30 17:42:00 by dgalide           #+#    #+#              #
-#    Updated: 2018/01/22 14:59:32 by dgalide          ###   ########.fr        #
+#    Updated: 2018/01/22 17:07:16 by dgalide          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -110,7 +110,7 @@ $(NAME): $(SRCO)
 	ranlib $@
 
 clean: 
-	rm -rf $(OBJ)
+	rm -rf $(SRCO)
 
 fclean: clean
 	rm -rf $(NAME)
