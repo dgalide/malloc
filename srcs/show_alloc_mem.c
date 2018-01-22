@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/22 17:03:38 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/22 18:51:51 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void			show_large(t_large *large, int *total, int *total_size)
 	t_large 	*tmp;
 
 	tmp = large;
+	(void)total;
+	(void)total_size;
 	while (tmp)
 	{
 		ft_printf("LARGE :\n\tWANTED -> %p - %p : %d bytes\n\tGIVEN -> %p - %p : %d bytes\n\t-- %d dedicated to malloc\n\t-- %d remaining bytes\n\t-- page size : %d\n",
@@ -29,8 +31,8 @@ void			show_large(t_large *large, int *total, int *total_size)
 			sizeof(t_large),
 			tmp->total_size - tmp->size - sizeof(t_large),
 			g_map.size_page);
-		*total_size += tmp->size;
-		*total += tmp->total_size;
+		// *total_size += tmp->size;
+		// *total += tmp->total_size;
 		tmp = tmp->next;
 	}
 }
@@ -89,5 +91,5 @@ void			show_alloc_mem(void)
 	total_size = 0;
 	show_large(g_map.larges, &total, &total_size);
 	show_medium(g_map.pages, &total, &total_size);
-	ft_printf("%d bytes given\n%d bytes allocated", total_size, total);
+	// ft_printf("%d bytes given\n%d bytes allocated", total_size, total);
 }

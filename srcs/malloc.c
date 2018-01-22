@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/22 17:03:21 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/22 18:37:08 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,11 +131,11 @@ void			*malloc(size_t size)
 		g_map.pages = NULL;
 		g_map.larges = NULL;
 	}
-	if (size == 0)
+	if (size <= 0)
 		return (NULL);
 	else
 	{
-		if (size < MEDIUM)
+		if (size <= MEDIUM)
 			return (handle_small(&g_map, size));
 		else
 			return (handle_large(size));
