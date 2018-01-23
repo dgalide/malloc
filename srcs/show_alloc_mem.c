@@ -6,51 +6,12 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/22 18:51:51 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/23 15:18:12 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/malloc.h"
 #include <stdio.h>
-
-void			show_large(t_large *large, int *total, int *total_size)
-{
-	t_large 	*tmp;
-
-	tmp = large;
-	(void)total;
-	(void)total_size;
-	while (tmp)
-	{
-		printf("LARGE :\n\tWANTED -> %p - %p : %d bytes\n\tGIVEN -> %p - %p : %d bytes\n\t-- %d dedicated to malloc\n\t-- %d remaining bytes\n\t-- page size : %d\n",
-			(void *)tmp + sizeof(t_large),
-			(void *)tmp + sizeof(t_large) + tmp->size,
-			tmp->size,
-			(void *)tmp,
-			(void *)tmp + tmp->total_size,
-			tmp->total_size,
-			(int)sizeof(t_large),
-			(int)(tmp->total_size - tmp->size - sizeof(t_large)),
-			g_map.size_page);
-		// *total_size += tmp->size;
-		// *total += tmp->total_size;
-		tmp = tmp->next;
-	}
-}
-
-void			show_tiny(t_block *tmp)
-{
-	printf("\tTINY :\n\t\tWANTED -> %p - %p : %d bytes\n\t\tGIVEN -> %p - %p : %d bytes\n\t\t-- %d dedicated to malloc\tUsed : %d\n",
-			(void *)tmp + sizeof(t_block), (void *)tmp + sizeof(t_block) + tmp->size, tmp->size,
-			(void *)tmp, (void *)tmp + sizeof(t_block) + tmp->size, (int)(sizeof(t_block)) + tmp->size, (int)(sizeof(t_block)), tmp->used);
-}
-
-void			show_small(t_block *tmp)
-{
-	printf("\tSMALL :\n\t\tWANTED -> %p - %p : %d bytes\n\t\tGIVEN -> %p - %p : %d bytes\n\t\t-- %d dedicated to malloc\tUsed : %d\n",
-			(void *)tmp + sizeof(t_block), (void *)tmp + (int)(sizeof(t_block)) + tmp->size, tmp->size,
-			(void *)tmp, (void *)tmp + sizeof(t_block) + tmp->size, (int)(sizeof(t_block)) + tmp->size, (int)(sizeof(t_block)), tmp->used);
-}
 
 void			show_medium(t_page *page, int *total, int *total_size)
 {
@@ -64,26 +25,11 @@ void			show_medium(t_page *page, int *total, int *total_size)
 	i = 0;
 	while (tmp)
 	{
-		tmp1 = tmp->blocks;
-		ft_printf("PAGE %d : %p\n", i++, tmp);
-		while (tmp1)
-		{
-			total_page += tmp1->size;
-			if (tmp1->size < TINY)
-				show_tiny(tmp1);
-			else
-				show_small(tmp1);
-			tmp1 = tmp1->next;
-		}
-		ft_printf("\n\tTotal given : %d Bytes\n", total_page);
-		*total_size += total_page;
-		*total += g_map.size_page;
-		total_page = 0;
-		tmp = tmp->next;
+		
 	}
 }
 
-void			show_alloc_mem(void)
+void			show_alloc_mem1(void)
 {
 	int			total_size;
 	int			total;

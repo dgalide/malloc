@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:24 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/22 18:19:38 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/23 14:55:16 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_malloc					g_map;
 void						*malloc(size_t size);
 void						*realloc(void *ptr, size_t size);
 void						free(void *ptr);
-void						show_alloc_mem(void);
+// void						show_alloc_mem(void);
 void						*malloc_failed(void);
 
 #endif
