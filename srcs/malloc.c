@@ -57,7 +57,7 @@ void			*handle_tiny_small(size_t size, int alloc_type)
 	void		*ret;
 
 	ret = NULL;
-	if ((ret = update_page(g_map.pages, size, alloc_type)))
+	if ((ret = update_page(size, alloc_type)))
 		return (ret);
 	else
 		return (create_page(size, alloc_type));

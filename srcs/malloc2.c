@@ -50,37 +50,49 @@ void			*create_page(int size, int alloc_type)
 	return ((void *)page->blocks + sizeof(t_block));
 }
 
-void			*update_page(t_page *pages, int size, int alloc_type)
+void			get_total(int *total, t_block *b, t_page *p)
+{
+	b = p->blocks;
+	*total = 0;
+	while (b->next)
+	{
+		*total += (b->size + sizeof(t_block));
+		b = b->next;
+	}
+	*total += (b->size + sizeof(t_block));
+}
+
+void 			*set_alloc(t_block *b, t_block *new, t_page *p, int total)
+{
+	b->next = (t_block *)((void *)p + total);
+	b->last = 0;
+	new = b->next;
+	new->used = 1;
+	new->last = 1;
+	new->next = NULL;
+	return ((void *)new);
+}
+
+void			*update_page(int size, int alloc_type)
 {
 	t_block		*new;
 	t_page		*p;
 	t_block		*b;
-	t_block		*prev;
 	int			total;
 
-	(void)alloc_type;
-	if (!pages)
+	new = NULL;
+	b = NULL;
+	p = (alloc_type == T_TINY ? g_map.tinies : g_map.smalls);
+	if (!p || (!g_map.tinies && !g_map.smalls))
 		return (NULL);
-	p = pages;
 	total = sizeof(t_page);
 	while (p)
 	{
-		b = p->blocks;
-		while (b)
+		get_total(&total, b, p);
+		if ((int)(PAGE_SIZE - total) > (int)(size + sizeof(t_block)))
 		{
-			prev = b;
-			total += (b->size + sizeof(t_block));
-			b = b->next;
-		}
-		if ((int)(g_map.size_page - total) > (int)(size + sizeof(t_block)))
-		{
-			prev->next = (t_block *)((void *)p + total);
-			prev->last = 0;
-			new = prev->next;
+			new = set_alloc(b, new, p, total);
 			new->size = size;
-			new->used = 1;
-			new->last = 1;
-			new->next = NULL;
 			return ((void *)new + sizeof(t_block));
 		}
 		p = p->next;

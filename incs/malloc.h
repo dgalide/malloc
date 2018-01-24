@@ -84,6 +84,6 @@ void						free(void *ptr);
 void						*malloc_failed(void);
 
 void						*create_page(int size, int alloc_type);
-void						*update_page(t_page *pages, int size, int alloc_type);
+void						*update_page(int size, int alloc_type);
 
 #endif
