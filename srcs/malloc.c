@@ -6,12 +6,21 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/22 18:37:08 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/24 13:27:57 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/malloc.h"
 #include <stdio.h>
+
+void			set_global(void)
+{
+	g_map.size_page = PAGE_SIZE;
+	g_map.pages = NULL;
+	g_map.larges = NULL;
+	g_map.tinies = NULL;
+	g_map.smalls = NULL;
+}
 
 void			*handle_large(int size)
 {
@@ -43,102 +52,29 @@ void			*handle_large(int size)
 	return ((void *)ptr + sizeof(t_large));
 }
 
-void			*create_page(t_page *pages, int size)
-{
-	t_page		*page;
-	t_page		*tmp;
-
-	tmp = pages;
-	page = (t_page *)mmap(0, g_map.size_page * PRE_ALLOC,\
-			PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANON | MAP_PRIVATE, -1, 0);
-	if (page == MAP_FAILED)
-		return (malloc_failed());
-	page->prev = NULL;
-	page->next = NULL;
-	page->blocks = (t_block *)((void *)page + sizeof(t_page));
-	page->blocks->size = size;
-	page->blocks->next = NULL;
-	page->blocks->used = 1;
-	page->blocks->last = 1;
-	if (tmp)
-	{
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = page;
-		page->prev = tmp;
-	}
-	else
-		g_map.pages = page;
-	return ((void *)page->blocks + sizeof(t_block));
-}
-
-void			*update_page(t_page *pages, int size)
-{
-	t_block		*new;
-	t_page		*p;
-	t_block		*b;
-	t_block		*prev;
-	int			total;
-
-	if (!pages)
-		return (NULL);
-	p = pages;
-	total = sizeof(t_page);
-	while (p)
-	{
-		b = p->blocks;
-		while (b)
-		{
-			prev = b;
-			total += (b->size + sizeof(t_block));
-			b = b->next;
-		}
-		if ((int)(g_map.size_page - total) > (int)(size + sizeof(t_block)))
-		{
-			prev->next = (t_block *)((void *)p + total);
-			prev->last = 0;
-			new = prev->next;
-			new->size = size;
-			new->used = 1;
-			new->last = 1;
-			new->next = NULL;
-			return ((void *)new + sizeof(t_block));
-		}
-		p = p->next;
-		total = sizeof(t_page);
-	}
-	return (NULL);
-}
-
-void			*handle_small(t_malloc *map, int size)
+void			*handle_tiny_small(size_t size, int alloc_type)
 {
 	void		*ret;
 
 	ret = NULL;
-	if ((ret = update_page(map->pages, size)))
+	if ((ret = update_page(g_map.pages, size, alloc_type)))
 		return (ret);
 	else
-		return (create_page(map->pages, size));
+		return (create_page(size, alloc_type));
 }
 
 void			*malloc(size_t size)
 {
 	static int	first;
+	int			alloc_type;
 
-	printf("[MALLOC] -- size : %d at entry\n", (int)size);
+	alloc_type = size > TINY ? (size > SMALL ? T_LARGE : T_SMALL) : T_TINY;
 	if (first++ == 0)
-	{
-		g_map.size_page = getpagesize();
-		g_map.pages = NULL;
-		g_map.larges = NULL;
-	}
+		set_global();
 	if (size <= 0)
 		return (NULL);
+	if (size <= TINY)
+		return (handle_tiny_small(size, alloc_type));
 	else
-	{
-		if (size <= MEDIUM)
-			return (handle_small(&g_map, size));
-		else
-			return (handle_large(size));
-	}
+		return (handle_large(size));
 }

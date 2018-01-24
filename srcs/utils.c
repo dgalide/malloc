@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/23 15:21:26 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/24 12:09:45 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,21 @@ void			*malloc_failed(void)
 {
 	ft_printf("%s\n", strerror(errno));
 	return (NULL);
+}
+
+static size_t		ft_nbrlen(unsigned long long n)
+{
+	size_t i;
+
+	i = 0;
+	if (n == 0)
+		return (1);
+	while (n)
+	{
+		n = n / 16;
+		i++;
+	}
+	return (i);
 }
 
 void				ft_print_addr(unsigned long long n, int endl)
@@ -39,19 +54,4 @@ void				ft_print_addr(unsigned long long n, int endl)
 		ft_putendl(str);
 	else
 		ft_putstr(str);
-}
-
-static size_t		ft_nbrlen(unsigned long long n)
-{
-	size_t i;
-
-	i = 0;
-	if (n == 0)
-		return (1);
-	while (n)
-	{
-		n = n / 16;
-		i++;
-	}
-	return (i);
 }
