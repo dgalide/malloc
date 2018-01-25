@@ -56,7 +56,6 @@ void			*handle_tiny_small(size_t size, int alloc_type)
 {
 	void		*ret;
 
-	ret = NULL;
 	if ((ret = update_page(size, alloc_type)))
 		return (ret);
 	else
@@ -73,8 +72,10 @@ void			*malloc(size_t size)
 		set_global();
 	if (size <= 0)
 		return (NULL);
-	if (size <= TINY)
+	if (size <= SMALL)
+	{
 		return (handle_tiny_small(size, alloc_type));
+	}
 	else
 		return (handle_large(size));
 }

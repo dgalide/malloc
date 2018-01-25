@@ -39,21 +39,24 @@ int				show_not_larges(int alloc_type)
 	total = 0;
 	pages = (alloc_type == T_TINY) ? g_map.tinies : g_map.smalls;
 	ft_putendl((alloc_type == T_TINY) ? "TINY : " : "SMALL : ");
-	ft_print_addr((int)pages, 1);
-	printf("%p", (void *)pages);
+	// ft_print_addr((int)pages, 1);
+	// printf("%p", (void *)pages);
 	while (pages)
 	{
 		block = pages->blocks;
 		while (block)
 		{
-			ft_printf("");
+			// ft_printf("");
 			ft_print_addr((int)block + sizeof(t_block), 0);
+			// ft_printf("%p - %p : \n", (void *)block + sizeof(t_block),\
+			// 	(void *)block + sizeof(t_block) + block->size, block->size);
 			ft_putstr(" - ");
 			ft_print_addr((int)block + sizeof(t_block) + block->size, 0);
 			ft_putstr(" : ");
 			ft_putnbr(block->size);
 			ft_putchar('\n');
 			total += block->size;
+			block = block->next;
 		}
 		pages = pages->next;
 	}
