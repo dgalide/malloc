@@ -7,5 +7,6 @@ int			main(void)
 
 	a = malloc(40);
 	a = malloc(1025);
+	show_alloc_mem();
 	return 0;
 }

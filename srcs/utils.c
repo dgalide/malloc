@@ -33,7 +33,7 @@ static size_t		ft_nbrlen(unsigned long long n)
 	return (i);
 }
 
-void				ft_print_addr(unsigned long long n, int endl)
+void				ft_print_addr(int n, int endl)
 {
 	char				str[ft_nbrlen(n)];
 	size_t				len;

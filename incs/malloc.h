@@ -37,8 +37,8 @@
 # define SMALL_MODULO (SMALL * PRE_ALLOC % PAGE_SIZE)
 # define SMALL_DIVIDE (SMALL * PRE_ALLOC / PAGE_SIZE)
 
-# define TINY_SIZE TINY_MODULO ? TINY_DIVIDE : TINY_DIVIDE + 1
-# define SMALL_SIZE SMALL_MODULO ? SMALL_DIVIDE : SMALL_DIVIDE + 1
+# define TINY_SIZE !TINY_MODULO ? TINY_DIVIDE : TINY_DIVIDE + 1
+# define SMALL_SIZE !SMALL_MODULO ? SMALL_DIVIDE : SMALL_DIVIDE + 1
 
 # define FLAGS (MAP_ANON | MAP_PRIVATE)
 # define PROTS (PROT_READ | PROT_WRITE | PROT_EXEC)
@@ -80,10 +80,12 @@ t_malloc					g_map;
 void						*malloc(size_t size);
 void						*realloc(void *ptr, size_t size);
 void						free(void *ptr);
-// void						show_alloc_mem(void);
+void						show_alloc_mem(void);
 void						*malloc_failed(void);
 
 void						*create_page(int size, int alloc_type);
 void						*update_page(int size, int alloc_type);
+
+void						ft_print_addr(int n, int endl);
 
 #endif

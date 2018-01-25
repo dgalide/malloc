@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../incs/malloc.h"
-
+#include <stdio.h>
 
 void			setup_page(t_page *page, int size)
 {
@@ -31,6 +31,8 @@ void			*create_page(int size, int alloc_type)
 	t_page		*reference;
 	int			alloc_size;
 
+	ft_putendl("Create Page");
+	// printf("%d\n%d\n", TINY_SIZE, SMALL_SIZE);
 	alloc_size = (alloc_type == T_TINY ? TINY_SIZE : SMALL_SIZE);
 	tmp = (alloc_type == T_TINY ? g_map.tinies : g_map.smalls);
 	reference = tmp;
@@ -38,6 +40,7 @@ void			*create_page(int size, int alloc_type)
 	if (page == MAP_FAILED)
 		return (malloc_failed());
 	setup_page(page, size);
+	printf("page->size : %d\n", page->blocks->size);
 	if (tmp)
 	{
 		while (tmp->next)
@@ -82,9 +85,11 @@ void			*update_page(int size, int alloc_type)
 
 	new = NULL;
 	b = NULL;
+	ft_putendl("Update Page");
 	p = (alloc_type == T_TINY ? g_map.tinies : g_map.smalls);
 	if (!p || (!g_map.tinies && !g_map.smalls))
 		return (NULL);
+	ft_putendl("Update Page 0");
 	total = sizeof(t_page);
 	while (p)
 	{
