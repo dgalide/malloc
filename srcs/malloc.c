@@ -67,7 +67,7 @@ void			*malloc(size_t size)
 	static int	first;
 	int			alloc_type;
 
-	alloc_type = size > T_TINY ? (size > T_SMALL ? T_LARGE : T_SMALL) : T_TINY;
+	alloc_type = size > TINY ? (size > SMALL ? T_LARGE : T_SMALL) : T_TINY;
 	if (first++ == 0)
 		set_global();
 	if (size <= 0)
