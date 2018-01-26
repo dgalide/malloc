@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:38:35 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/26 18:18:24 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/26 18:21:17 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int				get_size_medium(void *ptr, int first)
 		pages = pages->next;
 	}
 	if (first)
-		return get_size_medium(ptr, 0);
+		return (get_size_medium(ptr, 0));
 	else
 		return (0);
 }
