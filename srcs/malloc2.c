@@ -6,14 +6,14 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/24 14:27:44 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/26 18:02:47 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/malloc.h"
 #include <stdio.h>
 
-void			setup_page(t_page **page, int size)
+void		setup_page(t_page **page, int size, int alloc_size)
 {
 	(*page)->prev = NULL;
 	(*page)->next = NULL;
@@ -22,9 +22,11 @@ void			setup_page(t_page **page, int size)
 	(*page)->blocks->next = NULL;
 	(*page)->blocks->used = 1;
 	(*page)->blocks->last = 1;
+	(*page)->byte_left = alloc_size - (int)sizeof(t_page);
+	(*page)->byte_left -= (size + (int)sizeof(t_block));
 }
 
-void			*create_page(int size, int alloc_type)
+void		*create_page(int size, int alloc_type)
 {
 	t_page		*page;
 	t_page		*tmp;
@@ -35,7 +37,7 @@ void			*create_page(int size, int alloc_type)
 	page = (t_page *)mmap(0, alloc_size, PROTS, FLAGS , -1, 0);
 	if (page == MAP_FAILED)
 		return (malloc_failed());
-	setup_page(&page, size);
+	setup_page(&page, size, alloc_size);
 	if (tmp)
 	{
 		while (tmp->next)
@@ -53,21 +55,19 @@ void			*create_page(int size, int alloc_type)
 	return ((void *)page->blocks + sizeof(t_block));
 }
 
-void			get_total(int *total, t_block **b, t_page **p)
+void		get_last(t_block **b, t_page **p)
 {
 	*b = (*p)->blocks;
-	*total = 0;
 	while ((*b)->next)
-	{
-		*total += ((*b)->size + sizeof(t_block));
 		(*b) = (*b)->next;
-	}
-	*total += ((*b)->size + sizeof(t_block));
 }
 
-void 			*set_alloc(t_block **b, t_block **new, t_page **p, int total)
+void 		*set_alloc(t_block **b, t_block **new, t_page **p, int alloc_type)
 {
-	(*b)->next = (t_block *)((void *)(*p) + total);
+	int			size;
+
+	size = alloc_type == T_TINY ? TINY_SIZE : SMALL_SIZE;
+	(*b)->next = (t_block *)((void *)(*p) + (size - (*p)->byte_left));
 	(*b)->last = 0;
 	*new = (*b)->next;
 	(*new)->used = 1;
@@ -76,30 +76,28 @@ void 			*set_alloc(t_block **b, t_block **new, t_page **p, int total)
 	return ((void *)*new);
 }
 
-void			*update_page(int size, int alloc_type)
+void		*update_page(int size, int alloc_type)
 {
 	t_block		*new;
 	t_page		*p;
 	t_block		*b;
-	int			total;
 
-	new = NULL;
 	b = NULL;
 	p = (alloc_type == T_TINY ? g_map.tinies : g_map.smalls);
 	if (!p || (!g_map.tinies && !g_map.smalls))
 		return (NULL);
-	total = sizeof(t_page);
 	while (p)
 	{
-		get_total(&total, &b, &p);
-		if ((int)(PAGE_SIZE - total) > (int)(size + sizeof(t_block)))
+		if (p->byte_left - (int)sizeof(t_block) >= size)
 		{
-			new = set_alloc(&b, &new, &p, total);
+			get_last(&b, &p);
+			new = set_alloc(&b, &new, &p, alloc_type);
 			new->size = size;
+			p->byte_left -= (size + (int)sizeof(t_block));
 			return ((void *)new + sizeof(t_block));
 		}
-		p = p->next;
-		total = sizeof(t_page);
+		else
+			p = p->next;
 	}
 	return (NULL);
 }

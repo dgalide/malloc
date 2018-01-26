@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:24 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/24 13:17:49 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/26 17:45:09 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct				s_page
 {
 	struct s_page			*next;
 	struct s_page			*prev;
+	int						byte_left;
 	t_block					*blocks;
 }							t_page;
 
