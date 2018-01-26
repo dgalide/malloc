@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/26 17:21:33 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/26 18:11:46 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ void			*handle_large(int size)
 	size += sizeof(t_large);
 	final_size = (size % g_map.size_page > 0) ? (size / g_map.size_page + 1) *
 	g_map.size_page : size / g_map.size_page * g_map.size_page;
-	ptr = (t_large *)mmap(0, final_size, PROT_READ | PROT_WRITE | PROT_EXEC,
-		MAP_ANON | MAP_PRIVATE, -1, 0);
+	ptr = (t_large *)mmap(0, final_size, PROTS, FLAGS, -1, 0);
 	if (ptr == MAP_FAILED)
 		return (malloc_failed());
 	ptr->size = size - sizeof(t_large);
@@ -67,7 +66,7 @@ void			*malloc(size_t size)
 	static int	first;
 	int			alloc_type;
 
-	alloc_type = size > TINY ? (size > SMALL ? T_LARGE : T_SMALL) : T_TINY;
+	alloc_type = size > TINY ? T_SMALL : T_TINY;
 	if (first++ == 0)
 		set_global();
 	if (size <= 0)

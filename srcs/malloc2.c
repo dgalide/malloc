@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/26 18:02:47 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/26 18:13:15 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void		*create_page(int size, int alloc_type)
 
 	alloc_size = (alloc_type == T_TINY ? TINY_SIZE : SMALL_SIZE);
 	tmp = (alloc_type == T_TINY ? g_map.tinies : g_map.smalls);
-	page = (t_page *)mmap(0, alloc_size, PROTS, FLAGS , -1, 0);
+	page = (t_page *)mmap(0, alloc_size, PROTS, FLAGS, -1, 0);
 	if (page == MAP_FAILED)
 		return (malloc_failed());
 	setup_page(&page, size, alloc_size);
@@ -62,7 +62,7 @@ void		get_last(t_block **b, t_page **p)
 		(*b) = (*b)->next;
 }
 
-void 		*set_alloc(t_block **b, t_block **new, t_page **p, int alloc_type)
+void		*set_alloc(t_block **b, t_block **new, t_page **p, int alloc_type)
 {
 	int			size;
 

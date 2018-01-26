@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:38:35 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/22 18:36:42 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/26 18:18:24 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,18 @@ int				get_size_large(void *ptr)
 	while (tmp)
 	{
 		if ((void *)tmp + sizeof(t_large) == ptr)
-			return tmp->size;
+			return (tmp->size);
 		tmp = tmp->next;
 	}
 	return (0);
 }
 
-int				get_size_medium(void *ptr)
+int				get_size_medium(void *ptr, int first)
 {
 	t_block		*blocks;
 	t_page		*pages;
 
-	pages = g_map.pages;
+	pages = first ? g_map.smalls : g_map.tinies;
 	while (pages)
 	{
 		blocks = pages->blocks;
@@ -43,7 +43,10 @@ int				get_size_medium(void *ptr)
 		}
 		pages = pages->next;
 	}
-	return (0);
+	if (first)
+		return get_size_medium(ptr, 0);
+	else
+		return (0);
 }
 
 void			*realloc(void *ptr, size_t size)
@@ -61,7 +64,7 @@ void			*realloc(void *ptr, size_t size)
 		return (malloc(1));
 	}
 	if (!(old_size = get_size_large(ptr)))
-		if(!(old_size = get_size_medium(ptr)))
+		if (!(old_size = get_size_medium(ptr, 1)))
 			return (NULL);
 	if (old_size > (int)size)
 		return (ptr);
