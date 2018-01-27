@@ -14,7 +14,7 @@
 
 void			*malloc_failed(void)
 {
-	ft_printf("%s\n", strerror(errno));
+	write(1, "Error\n", 6);
 	return (NULL);
 }
 
