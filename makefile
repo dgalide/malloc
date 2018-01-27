@@ -2,9 +2,11 @@
 LIB = srcs/libft/libft.a
 
 SRC = srcs/malloc.c
+SRC += srcs/malloc2.c
 SRC += srcs/free.c
 SRC += srcs/show_alloc_mem.c
 SRC += srcs/realloc.c
+SRC += srcs/utils.c
 
 INC = -I ./includes/
 
@@ -12,7 +14,7 @@ ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-NAME = malloc
+NAME = libft_malloc
 OBJ = $(SRC:.c=.o)
 FLAG = -Wall -Werror -Wextra
 CG = \033[92m
@@ -46,12 +48,12 @@ start:
 clean: start
 	@echo "\033[K$(CY)[MALLOC] :$(CE) $(CG)Cleaning Malloc objects$(CE)\033[1A";
 	@/bin/rm -rf $(OBJ);
-	-@make -C srcs/libft;
+	-@make clean -C srcs/libft;
 
 fclean: start clean
 	@echo "\033[K$(CY)[MALLOC] :$(CE) $(CG)Cleaning 42sh ...$(CE)\033[1A";
 	@/bin/rm -f $(NAME)_$(HOSTTYPE) "libft_malloc.so";
-	-@make -C srcs/libft;
+	-@make fclean -C srcs/libft;
 
 re: fclean all
 

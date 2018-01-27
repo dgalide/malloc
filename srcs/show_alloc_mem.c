@@ -1,71 +1,78 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   show_alloc_mem.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
+/*   Updated: 2018/01/26 17:29:21 by dgalide          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incs/malloc.h"
 
-void			show_large(t_large *large, int *total, int *total_size)
+void			print_large(t_large *large)
 {
-	t_large 	*tmp;
+	ft_print_addr((int)large + sizeof(t_large), 0);
+	ft_putstr(" - ");
+	ft_print_addr((int)large + sizeof(t_large) + large->size, 0);
+	ft_putstr(" : ");
+	ft_putnbr(large->size);
+	ft_putendl(" Bytes");
+}
 
-	tmp = large;
-	while (tmp)
+void			print_block(t_block *block)
+{
+	ft_print_addr((int)block + sizeof(t_block), 0);
+	ft_putstr(" - ");
+	ft_print_addr((int)block + sizeof(t_block) + block->size, 0);
+	ft_putstr(" : ");
+	ft_putnbr(block->size);
+	ft_putendl(" Bytes");
+}
+
+int				show_larges(void)
+{
+	int			total;
+	t_large		*larges;
+
+	total = 0;
+	larges = g_map.larges;
+	if (larges)
+		ft_putendl("LARGES :");
+	while (larges)
 	{
-		ft_printf("LARGE :\n\tWANTED -> %p - %p : %d bytes\n\tGIVEN -> %p - %p : %d bytes\n\t-- %d dedicated to malloc\n\t-- %d remaining bytes\n\t-- page size : %d\n",
-			(void *)tmp + sizeof(t_large),
-			(void *)tmp + sizeof(t_large) + tmp->size,
-			tmp->size,
-			(void *)tmp,
-			(void *)tmp + tmp->total_size,
-			tmp->total_size,
-			sizeof(t_large),
-			tmp->total_size - tmp->size - sizeof(t_large),
-			map.size_page);
-		*total_size += tmp->size;
-		*total += tmp->total_size;
-		tmp = tmp->next;
+		total += larges->size;
+		print_large(larges);
+		larges = larges->next;
 	}
+	ft_putchar('\n');
+	return total;
 }
 
-void			show_tiny(t_block *tmp)
+int				show_not_larges(int alloc_type)
 {
-	ft_printf("\tTINY :\n\t\tWANTED -> %p - %p : %d bytes\n\t\tGIVEN -> %p - %p : %d bytes\n\t\t-- %d dedicated to malloc\tUsed : %d\n",
-			(void *)tmp + sizeof(t_block), (void *)tmp + sizeof(t_block) + tmp->size, tmp->size,
-			(void *)tmp, (void *)tmp + sizeof(t_block) + tmp->size, sizeof(t_block) + tmp->size, sizeof(t_block), tmp->used);
-}
+	t_page		*pages;
+	t_block		*block;
+	int			total;
 
-void			show_small(t_block *tmp)
-{
-	ft_printf("\tSMALL :\n\t\tWANTED -> %p - %p : %d bytes\n\t\tGIVEN -> %p - %p : %d bytes\n\t\t-- %d dedicated to malloc\tUsed : %d\n",
-			(void *)tmp + sizeof(t_block), (void *)tmp + sizeof(t_block) + tmp->size, tmp->size,
-			(void *)tmp, (void *)tmp + sizeof(t_block) + tmp->size, sizeof(t_block) + tmp->size, sizeof(t_block), tmp->used);
-}
-
-void			show_medium(t_page *page, int *total, int *total_size)
-{
-	t_page		*tmp;
-	t_block		*tmp1;
-	int			total_page;
-	int			i;
-
-	tmp = page;
-	total_page = 0;
-	i = 0;
-	while (tmp)
+	total = 0;
+	pages = (alloc_type == T_TINY) ? g_map.tinies : g_map.smalls;
+	if (pages)
+		ft_putendl((alloc_type == T_TINY) ? "TINY :" : "SMALL :");
+	while (pages)
 	{
-		tmp1 = tmp->blocks;
-		ft_printf("PAGE %d : %p\n", i++, tmp);
-		while (tmp1)
+		block = pages->blocks;
+		while (block)
 		{
-			total_page += tmp1->size;
-			if (tmp1->size < TINY)
-				show_tiny(tmp1);
-			else
-				show_small(tmp1);
-			tmp1 = tmp1->next;
+			print_block(block);
+			total += block->size;
+			block = block->next;
 		}
-		ft_printf("\n\tTotal given : %d Bytes\n", total_page);
-		*total_size += total_page;
-		*total += map.size_page;
-		total_page = 0;
-		tmp = tmp->next;
+		pages = pages->next;
 	}
+	return total;
 }
 
 void			show_alloc_mem(void)
@@ -75,7 +82,10 @@ void			show_alloc_mem(void)
 
 	total = 0;
 	total_size = 0;
-	show_large(map.larges, &total, &total_size);
-	show_medium(map.pages, &total, &total_size);
-	ft_printf("%d bytes given\n%d bytes allocated", total_size, total);
+	total += show_not_larges(T_TINY);
+	total += show_not_larges(T_SMALL);
+	total += show_larges();
+	ft_putstr("Total : ");
+	ft_putnbr(total);
+	ft_putendl(" Bytes\n");
 }
