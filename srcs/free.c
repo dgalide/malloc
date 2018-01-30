@@ -6,11 +6,12 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:05 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/22 17:41:38 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/30 16:19:46 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/malloc.h"
+#include <stdio.h>
 
 void			refresh_list(t_large *page)
 {
@@ -35,12 +36,12 @@ void			refresh_list(t_large *page)
 	munmap(page, page->total_size);
 }
 
-void			reset_small(void *ptr)
+void			reset_small(void *ptr, int first)
 {
 	t_page		*pages;
 	t_block		*blocks;
 
-	pages = g_map.pages;
+	pages = first ? g_map.tinies : g_map.smalls;
 	while (pages)
 	{
 		blocks = pages->blocks;
@@ -55,10 +56,27 @@ void			reset_small(void *ptr)
 		}
 		pages = pages->next;
 	}
+	if (first)
+		reset_small(ptr, 0);
 }
 
-void			get_that_page_out(t_page *page)
+void			get_that_page_out(t_page *page, int boo)
 {
+	if (!page->prev && !page->next)
+	{
+		if (boo)
+			g_map.tinies = NULL;
+		else
+			g_map.smalls = NULL;
+	}
+	else if (!page->prev && page->next)
+	{
+		page->next->prev = NULL;
+		if (boo)
+			g_map.tinies = (g_map.tinies)->next;
+		else
+			g_map.smalls = (g_map.smalls)->next;
+	}
 	if (page->prev && !page->next)
 	{
 		page->prev->next = NULL;
@@ -68,18 +86,16 @@ void			get_that_page_out(t_page *page)
 		page->prev->next = page->next;
 		page->next->prev = page->prev;
 	}
-	munmap(page, g_map.size_page);
+	munmap(page, page->total_size);
 }
 
-void			garbage_collector(void)
+void			garbage_collector(int boo)
 {
 	t_page		*pages;
 	t_block		*blocks;
-	int			first;
 	int			counter;
 
-	pages = g_map.pages;
-	first = 1;
+	pages = boo ? g_map.tinies : g_map.smalls;
 	counter = 0;
 	while (pages)
 	{
@@ -90,12 +106,13 @@ void			garbage_collector(void)
 				counter++;
 			blocks = blocks->next;
 		}
-		if (!counter && !first)
-			get_that_page_out(pages);
+		if (!counter)
+			get_that_page_out(pages, boo);
 		counter = 0;
-		first = 0;
 		pages = pages->next;
 	}
+	if (boo)
+		garbage_collector(0);
 }
 
 void			free(void *ptr)
@@ -112,8 +129,8 @@ void			free(void *ptr)
 			refresh_list(tmp);
 		else
 		{
-			reset_small(ptr);
-			garbage_collector();
+			reset_small(ptr, 1);
+			garbage_collector(1);
 		}
 	}
 }

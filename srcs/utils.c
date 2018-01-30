@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/26 18:06:34 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/30 16:19:32 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,18 @@ void				ft_print_addr(int n, int endl)
 		ft_putendl(str);
 	else
 		ft_putstr(str);
+}
+
+void				*check_existing_alloc(int size, t_page *page)
+{
+	t_block			*block;
+
+	block = page->blocks;
+	while (block)
+	{
+		if (!block->used && block->size >= size)
+			return ((void *)block + sizeof(t_block));
+		block = block->next;
+	}
+	return (NULL);
 }

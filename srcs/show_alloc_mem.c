@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/26 17:29:21 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/30 14:48:34 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int				show_larges(void)
 		larges = larges->next;
 	}
 	ft_putchar('\n');
-	return total;
+	return (total);
 }
 
 int				show_not_larges(int alloc_type)
@@ -72,7 +72,7 @@ int				show_not_larges(int alloc_type)
 		}
 		pages = pages->next;
 	}
-	return total;
+	return (total);
 }
 
 void			show_alloc_mem(void)

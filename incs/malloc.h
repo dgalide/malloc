@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:24 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/26 18:07:36 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/30 16:18:58 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@
 
 # define PAGE_SIZE getpagesize()
 
-# define PRE_ALLOC 105
+# define PRE_ALLOC 100
 
-# define TINY 50
-# define MEDIUM 1024
-# define SMALL 1024
+# define TINY 1024
+# define MEDIUM 4096
+# define SMALL 4096
 
 # define T_SMALL 0
 # define T_TINY 1
@@ -39,6 +39,9 @@
 
 # define TINY_SIZE !TINY_MODULO ? TINY_DIVIDE : TINY_DIVIDE + 1
 # define SMALL_SIZE !SMALL_MODULO ? SMALL_DIVIDE : SMALL_DIVIDE + 1
+
+# define TINY_FINAL_SIZE TINY_SIZE * PAGE_SIZE
+# define SMALL_FINAL_SIZE SMALL_SIZE * PAGE_SIZE
 
 # define FLAGS (MAP_ANON | MAP_PRIVATE)
 # define PROTS (PROT_READ | PROT_WRITE | PROT_EXEC)
@@ -64,6 +67,7 @@ typedef struct				s_page
 	struct s_page			*next;
 	struct s_page			*prev;
 	int						byte_left;
+	int						total_size;
 	t_block					*blocks;
 }							t_page;
 
@@ -88,5 +92,6 @@ void						*create_page(int size, int alloc_type);
 void						*update_page(int size, int alloc_type);
 
 void						ft_print_addr(int n, int endl);
+void						*check_existing_alloc(int size, t_page *page);
 
 #endif
