@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:24 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/30 16:18:58 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/31 13:48:11 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,14 @@
 
 # define PRE_ALLOC 100
 
-# define TINY 1024
-# define MEDIUM 4096
-# define SMALL 4096
+# define TINY PAGE_SIZE / 4
+# define SMALL PAGE_SIZE
 
 # define T_SMALL 0
 # define T_TINY 1
-# define T_LARGE 2
 
-# define TINY_MODULO (TINY * PRE_ALLOC % PAGE_SIZE)
-# define TINY_DIVIDE (TINY * PRE_ALLOC / PAGE_SIZE)
-
-# define SMALL_MODULO (SMALL * PRE_ALLOC % PAGE_SIZE)
-# define SMALL_DIVIDE (SMALL * PRE_ALLOC / PAGE_SIZE)
-
-# define TINY_SIZE !TINY_MODULO ? TINY_DIVIDE : TINY_DIVIDE + 1
-# define SMALL_SIZE !SMALL_MODULO ? SMALL_DIVIDE : SMALL_DIVIDE + 1
-
-# define TINY_FINAL_SIZE TINY_SIZE * PAGE_SIZE
-# define SMALL_FINAL_SIZE SMALL_SIZE * PAGE_SIZE
+# define TINY_SIZE TINY * PRE_ALLOC
+# define SMALL_SIZE SMALL * PRE_ALLOC
 
 # define FLAGS (MAP_ANON | MAP_PRIVATE)
 # define PROTS (PROT_READ | PROT_WRITE | PROT_EXEC)

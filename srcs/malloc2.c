@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/30 16:18:12 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/31 14:00:47 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void		*create_page(int size, int alloc_type)
 	t_page		*tmp;
 	int			alloc_size;
 
-	alloc_size = (alloc_type == T_TINY ? TINY_SIZE : SMALL_SIZE) * PAGE_SIZE;
+	alloc_size = (alloc_type == T_TINY ? TINY_SIZE : SMALL_SIZE);
 	tmp = (alloc_type == T_TINY ? g_map.tinies : g_map.smalls);
 	page = (t_page *)mmap(0, alloc_size, PROTS, FLAGS, -1, 0);
 	if (page == MAP_FAILED)
@@ -67,7 +67,7 @@ void		*set_alloc(t_block **b, t_block **new, t_page **p, int alloc_type)
 {
 	int			size;
 
-	size = (alloc_type == T_TINY ? TINY_SIZE : SMALL_SIZE) * PAGE_SIZE;
+	size = (alloc_type == T_TINY ? TINY_SIZE : SMALL_SIZE);
 	(*b)->next = (t_block *)((void *)(*p) + (size - (*p)->byte_left));
 	(*b)->last = 0;
 	*new = (*b)->next;
@@ -101,8 +101,7 @@ void		*update_page(int size, int alloc_type)
 			p->byte_left -= (size + (int)sizeof(t_block));
 			return ((void *)new + sizeof(t_block));
 		}
-		else
-			p = p->next;
+		p = p->next;
 	}
 	return (NULL);
 }

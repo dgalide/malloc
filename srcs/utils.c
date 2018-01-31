@@ -6,13 +6,13 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/30 16:19:32 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/31 14:01:25 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/malloc.h"
 
-void			*malloc_failed(void)
+void				*malloc_failed(void)
 {
 	write(1, "Error\n", 6);
 	return (NULL);

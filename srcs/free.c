@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:05 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/30 16:19:46 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/31 13:46:52 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,11 @@ void			garbage_collector(int boo)
 	t_page		*pages;
 	t_block		*blocks;
 	int			counter;
+	int			first;
 
 	pages = boo ? g_map.tinies : g_map.smalls;
 	counter = 0;
+	first = 0;
 	while (pages)
 	{
 		blocks = pages->blocks;
@@ -106,7 +108,7 @@ void			garbage_collector(int boo)
 				counter++;
 			blocks = blocks->next;
 		}
-		if (!counter)
+		if (!counter && !first++)
 			get_that_page_out(pages, boo);
 		counter = 0;
 		pages = pages->next;

@@ -6,7 +6,7 @@
 /*   By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 12:33:13 by dgalide           #+#    #+#             */
-/*   Updated: 2018/01/26 18:11:46 by dgalide          ###   ########.fr       */
+/*   Updated: 2018/01/31 13:47:38 by dgalide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,12 @@ void			*malloc(size_t size)
 	static int	first;
 	int			alloc_type;
 
-	alloc_type = size > TINY ? T_SMALL : T_TINY;
+	alloc_type = (int)size > TINY ? T_SMALL : T_TINY;
 	if (first++ == 0)
 		set_global();
 	if (size <= 0)
 		return (NULL);
-	if (size <= SMALL)
+	if ((int)size <= SMALL)
 	{
 		return (handle_tiny_small(size, alloc_type));
 	}

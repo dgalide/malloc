@@ -6,7 +6,7 @@
 #    By: dgalide <dgalide@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/30 17:42:00 by dgalide           #+#    #+#              #
-#    Updated: 2018/01/22 17:07:16 by dgalide          ###   ########.fr        #
+#    Updated: 2018/01/31 13:58:46 by dgalide          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,13 +106,13 @@ CFLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(SRCO)
-	ar rc $@ $^
+	@ar rc $@ $^
 	ranlib $@
 
 clean: 
-	rm -rf $(SRCO)
+	@rm -rf $(SRCO)
 
 fclean: clean
-	rm -rf $(NAME)
+	@rm -rf $(NAME)
 
 .PHONY: all clean
